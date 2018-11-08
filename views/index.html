@@ -5,15 +5,66 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <style>
+    #form {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
   <title>Mail Sender</title>
 </head>
 
 <body>
-  <h1>Hello, Mail Sender!</h1>
-  <form action="/api/mail" method="post">
-    <input name="text" type="text">
-    <button type="submit">Submit</button>
-  </form>
+  <div class="container">
+    <h1 class="text-center">Hello, Mail Sender!</h1>
+    <small class="form-text text-muted">Before sending your email using gmail you have to allow non secure apps to
+      access gmail you can do this by
+      going to your gmail settings <a href="https://myaccount.google.com/lesssecureapps" target="_blank">here</a>.</small>
+    <form id="form" class="container pt-2 pb-2" action="/contact/send" method="post">
+      <div class="row">
+        <div class="col mb-2">
+          <label class="form-text" for="from">From:</label>
+          <div class="input-group">
+            <input id="from" class="form-control" name="from" type="email" placeholder="Enter Email">
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon2">@gmail.com</span>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-2">
+          <label class="form-text" for="to">To:</label>
+          <div class="input-group">
+            <input id="to" class="form-control" name="to" type="email" placeholder="Enter Email">
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon2">@gmail.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mb-2">
+          <label class="form-text" for="contact">Name</label>
+          <div class="input-group">
+            <input id="contact" class="form-control" name="name" type="text" placeholder="Enter Your Name">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mb-2">
+          <label class="form-text" for="contact">Message</label>
+          <div class="form-group">
+            <textarea id="message" class="form-control" name="message" placeholder="Enter Message"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary mt-3">Send</button>
+    </form>
+  </div>
 </body>
 
 </html>
