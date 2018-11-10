@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const path = require('path');
+const CryptoJS = require('crypto-js');
 
 const app = express();
 const port = process.env.PORT || 5000;
+const secretPhrase = 'Secret Phrase';
 
 app.set('port', port);
 
@@ -16,9 +18,9 @@ app.get('/', (req, res) => {
 });
 
 app.post('/mail', (req, res) => {
-  const { password, to, subject, text } = req.body;
+  const { to, subject, text } = req.body;
   const from = req.body.from + '@gmail.com';
-
+  const password = CryptoJS.AES.decrypt(req.body.password, secretPhrase).toString(CryptoJS.enc.Utf8);
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -33,7 +35,7 @@ app.post('/mail', (req, res) => {
       res.status(err.responseCode).json({ error: err.response});
     } else {
       console.log('Message Sent: ' + info.response);
-      res.json({message: 'Message Send!'}).redirect('/');
+      res.json({ message: 'Message Send!' });
     }
   });
 });

@@ -18,7 +18,7 @@
 
 <body>
   <div class="container">
-    <h1 class="text-center">Hello, Mail Sender!</h1>
+    <h1 class="text-center">Hello! You can send an email!</h1>
     <small class="form-text text-muted">Before sending your email using gmail you have to allow non secure apps to
       access gmail you can do this by
       going to your gmail settings <a href="https://myaccount.google.com/lesssecureapps" target="_blank">here</a>.</small>
@@ -101,13 +101,20 @@
     crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
   <script>
-    $('#confirmPopup').on('shown.bs.modal', () => {
-      $('#password').trigger('focus');
-    });
+    $('#confirmPopup')
+      .on('shown.bs.modal', () => {
+        $('#password').trigger('focus');
+      })
+      .on('hidden.bs.modal', () => {
+        document.passwordForm.reset();
+      });
 
     $('#password-form').submit(e => {
       e.preventDefault();
+
+      $('#password')[0].value = CryptoJS.AES.encrypt($('#password')[0].value, 'Secret Phrase');
 
       const data = {
         method: 'POST',
@@ -125,7 +132,6 @@
           } else {
             $('#confirmPopup').modal('hide');
             document.mailForm.reset();
-            document.passwordForm.reset();
           }
         })
         .catch(err => console.log(err));
