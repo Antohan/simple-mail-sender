@@ -15,28 +15,25 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
 });
 
-app.post('/contact/send', (req, res) => {
+app.post('/mail', (req, res) => {
+  const { password, to, subject, text } = req.body;
+  const from = req.body.from + '@gmail.com';
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'youremail@address.com',
-      pass: 'yourpassword'
+      user: from,
+      pass: password
     }
   });
-  const mailOptions = {
-    from: 'sender@email.com', // sender address
-    to: 'to@email.com', // list of receivers
-    subject: 'Subject of your email', // Subject line
-    html: '<p>Your html here</p>' // plain text body
-  };
+  const mailOptions = { from, to, subject, text };
 
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
-      console.log(err);
-      res.redirect('/');
+      res.status(err.responseCode).json({ error: err.response});
     } else {
       console.log('Message Sent: ' + info.response);
-      res.redirect('/');
+      res.json({message: 'Message Send!'}).redirect('/');
     }
   });
 });
