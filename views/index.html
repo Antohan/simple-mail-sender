@@ -12,6 +12,41 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
+    .lds-ring {
+      display: inline-block;
+      position: relative;
+      width: 70px;
+      height: 17px;
+    }
+    .lds-ring div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      left: 21px;
+      width: 25px;
+      height: 25px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: #fff transparent transparent transparent;
+    }
+    .lds-ring div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+    .lds-ring div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+    .lds-ring div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+    @keyframes lds-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
   <title>Mail Sender</title>
 </head>
@@ -82,14 +117,14 @@
                 <div class="input-group">
                   <input id="password" class="form-control" name="password" type="password" placeholder="Enter Password">
                 </div>
-                <small class="form-text text-muted">This is password from your google mail.</small>
+                <small class="form-text text-muted">This is password from your google mail. Don't worry, it is safe.</small>
               </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button form="password-form" class="btn btn-primary">Send Mail</button>
+          <button id="submit-button" form="password-form" class="btn btn-primary">Send Mail</button>
         </div>
       </div>
     </div>
@@ -103,16 +138,21 @@
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
   <script>
+    const loaderLayout = '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>';
+
     $('#confirmPopup')
       .on('shown.bs.modal', () => {
         $('#password').trigger('focus');
       })
       .on('hidden.bs.modal', () => {
+        $('#submit-button').empty().append('Send Mail');
         document.passwordForm.reset();
       });
 
     $('#password-form').submit(e => {
       e.preventDefault();
+
+      $('#submit-button').empty().append(loaderLayout);
 
       $('#password')[0].value = CryptoJS.AES.encrypt($('#password')[0].value, 'Secret Phrase');
 
